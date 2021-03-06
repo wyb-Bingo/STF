@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ubin.stf.mapper.MenuMapper" >
+    <resultMap id="BaseResultMap" type="com.ubin.stf.model.Menu" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="component" property="component" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="iconClass" property="iconClass" jdbcType="VARCHAR" />
+        <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+        <result column="enabled" property="enabled" jdbcType="BIT" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="BaseWithRole" type="com.ubin.stf.model.Menu" extends="BaseResultMap">
+        <collection property="roleList" ofType="com.ubin.stf.model.Role">
+            <id column="rid" property="id" jdbcType="INTEGER" />
+            <result column="rname" property="name" jdbcType="VARCHAR" />
+            <result column="rnameZh" property="nameZh" jdbcType="VARCHAR" />
+            <result column="rteamId" property="teamId" jdbcType="INTEGER" />
+        </collection>
+    </resultMap>
+    <resultMap id="BaseWithChildren" type="com.ubin.stf.model.Menu" extends="BaseResultMap">
+        <collection property="subMenuList" ofType="com.ubin.stf.model.Menu" select="getAllMenuWithChildren" column="id">
+            <id column="id" property="id" jdbcType="INTEGER" />
+            <result column="url" property="url" jdbcType="VARCHAR"/>
+            <result column="path" property="path" jdbcType="VARCHAR" />
+            <result column="component" property="component" jdbcType="VARCHAR" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+            <result column="iconClass" property="iconClass" jdbcType="VARCHAR" />
+            <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+            <result column="enabled" property="enabled" jdbcType="BIT" />
+            <result column="type" property="type" jdbcType="INTEGER" />
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, url,path, component, name, iconClass, parentId, enabled, type
+  </sql>
+
+    <select id="getAllMenuList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from menu
+    </select>
+    
+    <select id="getAllMenuWithRole" resultMap="BaseWithRole">
+        select
+        m.id,m.url,m.path,m.component,m.name,m.iconClass,m.parentId,m.enabled,m.type,
+        r.id rid,r.name rname,r.nameZh rnameZh,r.teamId rteamId
+        from menu m join menu_role mr join role r
+        on m.id = mr.mid and mr.rid = r.id
+        where r.teamId = #{teamId}
+    </select>
+
+    <select id="getAllMenuWithChildren" resultMap="BaseWithChildren" >
+        select * from menu where parentId = #{parentId} and enabled = 1
+    </select>
+
+    <select id="getAllMenuIdUnderAdmin" resultType="integer">
+        select mid from menu_role mr where mr.rid = #{id}
+    </select>
+
+
+</mapper>

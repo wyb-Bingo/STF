@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ubin.stf.mapper.WeekClazzMapper" >
+    <resultMap id="BaseResultMap" type="com.ubin.stf.model.WeekClazz">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="week" property="week" jdbcType="VARCHAR" />
+        <association property="clazz" javaType="com.ubin.stf.model.Clazz">
+            <id column="cId" property="id" jdbcType="INTEGER" />
+            <result column="cName" property="name" jdbcType="VARCHAR" />
+            <result column="cTimeFrom" property="timeFrom" jdbcType="TIME" />
+            <result column="cTimeTo" property="timeTo" jdbcType="TIME" />
+        </association>
+    </resultMap>
+
+    <insert id="insertWeekClazz" useGeneratedKeys="true" keyProperty="id" parameterType="com.ubin.stf.model.WeekClazz">
+        insert into week_clazz (week,clazzId) values (#{week},#{clazz.id})
+    </insert>
+
+    <select id="getWeekClazzById" resultMap="BaseResultMap">
+        select wc.id,wc.week,c.id cId,c.name cName,c.timeFrom cTimeFrom,c.timeTo cTimeTo
+        from week_clazz wc join clazz c on wc.clazzId = c.id where wc.id = #{id}
+    </select>
+
+
+
+</mapper>

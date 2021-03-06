@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ubin.stf.mapper.RoleMapper" >
+    <resultMap id="BaseResultMap" type="com.ubin.stf.model.Role">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="nameZh" property="nameZh" jdbcType="VARCHAR" />
+        <result column="teamId" property="teamId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_List_Column" >
+        id,name,nameZh,teamId
+    </sql>
+
+    <select id="getAdminIsRoleList" resultMap="BaseResultMap">
+        select
+        r.*
+         from admin a join admin_role ar join role r
+         on a.id = ar.adminId and ar.rid = r.id
+         where a.id = #{id}
+    </select>
+
+    <insert id="createRole" useGeneratedKeys="true"  keyProperty="id"  parameterType="com.ubin.stf.model.Role">
+        insert into role (name,nameZh,teamId) values (#{name},#{nameZh},#{teamId})
+    </insert>
+
+    <insert id="insertRoleAdmin" >
+        insert into admin_role (rid,adminId) select #{rid},#{adminId} from DUAL where not EXISTS (SELECT id from admin_role where rid = #{rid} and adminId = #{adminId})
+    </insert>
+
+    <insert id="insertMenuListOfRole">
+        insert into menu_role (mid,rid) values
+        <foreach collection="ids" item="id" separator="," >
+            (#{id},#{roleId})
+        </foreach>
+    </insert>
+
+    <select id="findTargetRoleIdUnderTeam" resultType="java.lang.Integer">
+        select id from role where name = #{roleName} and teamId = #{teamId}
+    </select>
+
+
+
+</mapper>

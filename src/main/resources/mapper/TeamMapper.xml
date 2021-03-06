@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ubin.stf.mapper.TeamMapper" >
+    <resultMap id="BaseResultMap" type="com.ubin.stf.model.Team">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="teamName" property="teamName" jdbcType="VARCHAR" />
+        <result column="createAdminId" property="createAdminId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id,teamName,createAdminId
+    </sql>
+
+    <select id="getAdminIsTeamList" resultMap="BaseResultMap">
+        select
+        team.id,team.teamName,team.createAdminId
+        from team_admin inner join team
+        on team.id = team_admin.teamId
+        where team_admin.adminId = #{id}
+    </select>
+
+    <insert id="createTeam" useGeneratedKeys="true" keyProperty="id" parameterType="com.ubin.stf.model.Team">
+        insert into team (teamName,createAdminId) values (#{teamName},#{createAdminId})
+    </insert>
+
+    <insert id="insertTeamAdmin" >
+        insert into team_admin (teamId,adminId)
+         select #{teamId},#{adminId} from DUAL where not EXISTS
+         (SELECT id from team_admin where teamId = #{teamId} and adminId = #{adminId})
+    </insert>
+
+    <insert id="insertTeamUser" >
+        insert into team_user (teamId,userId) values (#{teamId},#{userId})
+    </insert>
+
+</mapper>
