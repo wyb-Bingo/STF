@@ -11,5 +11,5 @@ else
   docker rm "$word"
   echo "删除镜像------------------------------"
   imageId=`docker images | grep stf | grep 0.0.1-SNAPSHOT | awk '{print $3}'`
-  docker rmi "$imageId"
+  docker rmi -f "$imageId"
 fi
