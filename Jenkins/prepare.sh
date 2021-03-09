@@ -2,14 +2,16 @@
 appName="stf:0.0.1-SNAPSHOT"
 word=`docker ps -a | grep $appName  |  awk '{print $1}'`
 echo "$word"
-if [ -z "$word" ]
+
+if [ -z "$word" ];
 then
-   echo "当前不存在该容器，直接进行启动该操作-------------------------------------"
+	 echo "当前不存在该容器，直接进行启动该操作-------------------------------------"
 else
-  echo "删除容器--------------------------------------------"
-  docker stop "$word"
-  docker rm "$word"
-  echo "删除镜像------------------------------"
-  imageId=`docker images | grep stf | grep 0.0.1-SNAPSHOT | awk '{print $3}'`
-  docker rmi -f "$imageId"
+	  echo "删除容器--------------------------------------------"
+	    docker stop "$word"
+	      docker rm "$word"
+	        echo "删除镜像"
+		arrayId=`docker images | grep stf | grep 0.0.1-SNAPSHOT | awk '{print $3}'`
+#		echo "${arrayId}"
+		  docker rmi -f "$arrayId"
 fi
