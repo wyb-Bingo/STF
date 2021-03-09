@@ -1,6 +1,11 @@
 pipeline {
   agent any
   stages {
+    stage('Prepare'){
+        steps{
+         sh './Jenkins/prepare.sh'
+        }
+    }
     stage('build') {
       agent {
         docker {
@@ -17,7 +22,6 @@ pipeline {
     stage('deploy') {
       steps {
         sh 'docker images | grep stf'
-        sh 'docker stop stf'
         sh 'docker run -p 8081:8081 -d stf:0.0.1-SNAPSHOT --name stf'
         sh 'docker ps -a | grep stf'
       }
