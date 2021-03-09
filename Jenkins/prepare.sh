@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 appName="stf:0.0.1-SNAPSHOT"
 word = `docker ps -a | grep $appName  |  awk '{print $1}'`
 echo "$word"

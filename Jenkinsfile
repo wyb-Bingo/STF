@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Prepare'){
         steps{
-         sh './Jenkins/prepare.sh'
+         sh 'sudo ./Jenkins/prepare.sh'
         }
     }
     stage('build') {
