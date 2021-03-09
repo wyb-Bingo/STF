@@ -17,7 +17,7 @@ pipeline {
     stage('deploy') {
       steps {
         sh 'docker images | grep stf'
-        sh 'docker stop stf'
+        sh 'docker ps -a | grep stf| awk \'{print $1}\'| xargs docker stop'
         sh 'docker run -p 8081:8081 -d stf:0.0.1-SNAPSHOT --name stf'
         sh 'docker ps -a | grep stf'
       }
