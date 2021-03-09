@@ -10,5 +10,6 @@ else
   docker stop "$word"
   docker rm "$word"
   echo "删除镜像------------------------------"
-  docker rmi "$word"
+  arrayId=`docker images | grep stf | awk '{print $3}'`
+  docker rmi "${arrayId[0]}"
 fi
