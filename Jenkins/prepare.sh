@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 appName="stf:0.0.1-SNAPSHOT"
-word = `docker ps -a | grep $appName  |  awk '{print $1}'`
+word=`docker ps -a | grep $appName  |  awk '{print $1}'`
 echo "$word"
 
 if [ -z "$word" ];
@@ -11,6 +11,6 @@ else
   echo "删除容器--------------------------------------------"
   docker stop "$word"
   docker rm "$word"
-  echo "删除镜像"
+  echo "删除镜像------------------------------"
   docker rmi "$word"
 fi
