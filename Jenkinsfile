@@ -15,14 +15,8 @@ pipeline {
     }
 
     stage('deploy') {
-      agent {
-        dockerfile {
-          filename 'Dockerfile'
-        }
-
-      }
       steps {
-        sh 'docker ps'
+        sh 'docker images'
       }
     }
 
