@@ -155,5 +155,13 @@
         from department where id = #{depId}
     </select>
 
+    <select id="getUserIsDepartment" resultType="com.ubin.stf.model.Department">
+        select d.id, d.name, d.parentId, d.depPath, d.enabled, d.isParent ,d.teamId
+        from department d join department_user du
+        on d.id = du.depId
+        where d.teamId = #{teamId} and du.userId = #{userId}
+
+    </select>
+
 
 </mapper>

@@ -33,4 +33,5 @@ public interface UserMapper {
     int deleteUserUnderDepartment(@Param("userId") Integer userId,@Param("depId") Integer depId);
 
     User getSimpleUserInfoById(Integer id);
+
 }

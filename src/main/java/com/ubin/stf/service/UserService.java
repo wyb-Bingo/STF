@@ -2,6 +2,7 @@ package com.ubin.stf.service;
 
 import com.ubin.stf.mapper.TeamMapper;
 import com.ubin.stf.mapper.UserMapper;
+import com.ubin.stf.model.Department;
 import com.ubin.stf.model.Team;
 import com.ubin.stf.model.User;
 import com.ubin.stf.utils.ResponseBean;
@@ -34,6 +35,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     DepartmentService departmentService;
 
+    @Autowired
+    TeamService teamService;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userMapper.loadUserByUsername(s);
@@ -47,6 +51,9 @@ public class UserService implements UserDetailsService {
 
     public UserDetails loadUserByOpenId(String openId){
         User user = userMapper.loadUserByOpenId(openId);
+        if (user == null){
+            return null;
+        }
         user.setRoleList(roleService.getAdminIsRoleList(user.getId()));
         return user;
     }
@@ -130,5 +137,32 @@ public class UserService implements UserDetailsService {
             return userMapper.deleteUserUnderDepartment(userId, depId) > 0;
         }
         return false;
+    }
+
+    public List<Team> getUserOfTeam() {
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return teamService.getUserOfTeamList(principal.getId());
+    }
+
+    public boolean setUserTeam(Integer teamId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (user == null){
+            return false;
+        }
+        List<Team> userOfTeamList =  teamService.getUserOfTeamList(user.getId());
+        for (Team team:userOfTeamList){
+            if(team.getId().equals(teamId)){
+                user.setTeamId(teamId);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Department getUserIsDepartment(Integer principalId,Integer teamId) {
+        return departmentService.getUserIsDepartment(principalId,teamId);
     }
 }

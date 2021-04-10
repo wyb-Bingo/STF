@@ -11,8 +11,10 @@ public class Attendance {
     private String leaderStr;
     private String departmentStr;
     private String weekClazzStr;
+    private Integer admin;
     private Boolean enabled;
     private String address;
+    private WeekClazz today;
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,21 @@ public class Attendance {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public WeekClazz getToday() {
+        return today;
+    }
+
+    public void setToday(WeekClazz today) {
+        this.today = today;
+    }
+
+    public Integer getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Integer admin) {
+        this.admin = admin;
     }
 }

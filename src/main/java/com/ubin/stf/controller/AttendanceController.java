@@ -1,8 +1,6 @@
 package com.ubin.stf.controller;
 
-import com.ubin.stf.model.Attendance;
-import com.ubin.stf.model.AttendanceLeaderEntity;
-import com.ubin.stf.model.Clazz;
+import com.ubin.stf.model.*;
 import com.ubin.stf.service.AttendanceService;
 import com.ubin.stf.service.ClazzService;
 import com.ubin.stf.utils.ResponseBean;
@@ -57,6 +55,49 @@ public class AttendanceController {
         return ResponseBean.ok("操作成功");
     }
 
+    @GetMapping("/setting/attendance/user/show")
+    public List<Attendance> showAttendance(){
+        return attendanceService.showAttendance();
+    }
+
+    @PutMapping("/setting/attendance/admin/address/update")
+    public ResponseBean updateAddressOfAttendance(@RequestBody Attendance attendance){
+        int num = attendanceService.updateAddressOfAttendance(attendance.getAddress(),attendance.getId());
+        if (num == 1){
+            return ResponseBean.ok("设置成功");
+        }
+        return ResponseBean.error("设置失败");
+    }
+
+    @GetMapping("/setting/attendance/admin/get")
+    public ResponseBean getAttendanceListOfAdmin(){
+        List<Attendance> attendanceList = attendanceService.getAttendanceListOfAdmin();
+        if (attendanceList.isEmpty()){
+            return ResponseBean.error("获取失败");
+        }
+        return ResponseBean.ok("获取成功",attendanceList);
+    }
+
+    @GetMapping("/setting/attendance/user/status")
+    public AttendanceStatusEnum getUserIsAttendanceStatus(@RequestParam Integer id){
+        return attendanceService.getUserIsAttendanceStatus(id);
+    }
+
+    @PostMapping("/setting/attendance/user/click")
+    public ResponseBean clickAttendance(@RequestBody UserLocaltion userLocaltion){
+        String msg = attendanceService.insertAttendanceClickInfo(userLocaltion);
+        return ResponseBean.ok(msg);
+    }
+
+    @GetMapping("/statistics/data")
+    public AttendanceData getCurrentDateAttendanceData(@RequestParam String date,@RequestParam Integer id){
+        return attendanceService.getCurrentDateAttendanceData(date,id);
+    }
+
+    @GetMapping("/statistics/data/user")
+    public List<UserAttendanceData> getUserCurrentAttendanceData(@RequestParam Integer id,@RequestParam String date){
+        return attendanceService.getUserCurrentAttendanceData(id,date);
+    }
 
 
 

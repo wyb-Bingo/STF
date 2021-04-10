@@ -19,6 +19,14 @@
         where team_admin.adminId = #{id}
     </select>
 
+    <select id="getUserOfTeamList" resultMap="BaseResultMap">
+        select
+        team.id,team.teamName,team.createAdminId
+        from team_user join team
+        on team.id = team_user.teamId
+        where team_user.userId = #{id}
+    </select>
+
     <insert id="createTeam" useGeneratedKeys="true" keyProperty="id" parameterType="com.ubin.stf.model.Team">
         insert into team (teamName,createAdminId) values (#{teamName},#{createAdminId})
     </insert>

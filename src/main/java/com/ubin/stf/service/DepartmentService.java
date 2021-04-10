@@ -132,4 +132,8 @@ public class DepartmentService {
 
         return false;
     }
+
+    public Department getUserIsDepartment(Integer principalId,Integer teamId) {
+        return departmentMapper.getUserIsDepartment(principalId,teamId);
+    }
 }

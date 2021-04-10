@@ -13,4 +13,6 @@ public interface TeamMapper {
     void insertTeamAdmin(@Param("teamId") Integer teamId,@Param("adminId") Integer adminId);
 
     void insertTeamUser(@Param("teamId")Integer teamId,@Param("userId") Integer userId);
+
+    List<Team> getUserOfTeamList(Integer id);
 }

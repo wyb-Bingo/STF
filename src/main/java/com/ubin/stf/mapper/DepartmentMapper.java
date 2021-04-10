@@ -3,6 +3,7 @@ package com.ubin.stf.mapper;
 import com.ubin.stf.model.Department;
 import com.ubin.stf.model.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -34,4 +35,6 @@ public interface DepartmentMapper {
     void setDepartmentIsNotParent(Integer parentId);
 
     Department getSimpleDepartmentInfoById(Integer depId);
+
+    Department getUserIsDepartment(@Param("userId") Integer principalId,@Param("teamId") Integer teamId);
 }

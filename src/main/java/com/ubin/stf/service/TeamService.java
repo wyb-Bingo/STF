@@ -115,4 +115,7 @@ public class TeamService {
         teamMapper.insertTeamAdmin(teamId,adminId);
     }
 
+    public List<Team> getUserOfTeamList(Integer id) {
+        return teamMapper.getUserOfTeamList(id);
+    }
 }

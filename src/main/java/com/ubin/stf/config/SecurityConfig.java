@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/adminTeam/**","/team/build/","/system/config/**","/admin/info/");
+        web.ignoring().antMatchers("/adminTeam/**","/team/build/","/system/config/**","/admin/info/","/userTeam/**","/work/attendance/setting/attendance/user/**","/work/attendance/statistics/data/user/**");
     }
 
     @Override

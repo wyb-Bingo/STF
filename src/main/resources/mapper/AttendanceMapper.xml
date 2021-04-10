@@ -7,9 +7,28 @@
         <result column="weekClazzID" property="weekClazzStr" jdbcType="VARCHAR"/>
         <result column="leader" property="leaderStr" jdbcType="VARCHAR" />
         <result column="department" property="departmentStr" jdbcType="VARCHAR"/>
+        <result column="admin" property="admin" jdbcType="INTEGER" />
         <result column="enabled" property="enabled" jdbcType="BIT" />
         <result column="address" property="address" jdbcType="VARCHAR" />
     </resultMap>
+    
+    <resultMap id="SimpleInfoAttendanceUser" type="com.ubin.stf.model.AttendanceUser">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="attendanceId" property="attendanceId" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="date" property="date" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="isLeave" property="leave" jdbcType="BIT" />
+    </resultMap>
+
+    <select id="getAttendanceWithUserByIdAndData" resultMap="SimpleInfoAttendanceUser" >
+        select id,attendanceId,userId,date,time,isLeave from attendance_user where attendanceId = #{attendanceId} and date = #{date}
+    </select>
+
+    <select id="getAttendaceToUserByIdAndFromToDate" resultMap="SimpleInfoAttendanceUser">
+        <![CDATA[ select id,attendanceId,userId,date,time,isLeave from attendance_user where attendanceId = #{attendanceId} and
+        userId = #{userId} and date >= #{dateFrom} and date <= #{dateTo} ]]>
+    </select>
     
     <insert id="insertAttendance" >
         insert into attendance(name,weekClazzID,leader,department,admin,teamId,enabled)
@@ -17,10 +36,27 @@
     </insert>
 
     <select id="getAttendanceListByTeamId" resultMap="BaseResultMap">
-        select id,name,weekClazzID,leader,department,enabled,address from attendance where teamId = #{teamId}
+        select id,name,weekClazzID,leader,department,admin,enabled,address from attendance where teamId = #{teamId}
     </select>
 
     <update id="setAttendanceOfEnabled">
         update attendance set enabled = #{enabled} where id = #{id}
     </update>
+
+    <update id="updateAddress">
+        update attendance set address = #{address} where id  = #{id}
+    </update>
+
+    <select id="getAttendanceToUserByIdAndData" resultType="integer">
+        select count(id) from attendance_user where attendanceId = #{attendanceId} and userId = #{userId} and date = #{dateStr} and isLeave = 0
+    </select>
+
+    <select id="getAttendanceInfoById" resultMap="BaseResultMap">
+         select id,name,weekClazzID,leader,department,admin,enabled,address from attendance where id = #{id}
+    </select>
+
+    <insert id="insertAttendanceUser">
+        insert into attendance_user (attendanceId,userId,date,time,isLeave) values (#{attendanceId},#{userId},#{date},#{time},#{isLeave})
+    </insert>
+
 </mapper>
